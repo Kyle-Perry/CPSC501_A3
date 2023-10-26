@@ -50,12 +50,14 @@ public class Serializer {
 		// TODO Auto-generated method stub
 		Serializer ser = new Serializer();
 		Test2 a = ser.new Test2(100, "Test1", true, 3.14, new int[] {1, 2 ,3});
-
+		Test b = ser.new Test(1000, "This Test should appear once", true, 0.000000013);
+		
+		
 		Document aDoc = ser.serialize(a);
 		XMLOutputter xOut = new XMLOutputter(Format.getPrettyFormat());
 		try {
 			//xOut.output(aDoc, System.out);	
-			xOut.output(ser.serialize(new Test[] {ser.new Test(1,"aa",false,1.1), ser.new Test(2,"bbb",true,2.22),ser.new Test(3,"cccc",false, 3.333), ser.new Test(4,"ddddd",true, 4.4444)}), System.out);
+			xOut.output(ser.serialize(new Test[] {b, ser.new Test(1,"aa",false,1.1), ser.new Test(2,"bbb",true,2.22),ser.new Test(3,"cccc",false, 3.333), ser.new Test(4,"ddddd",true, 4.4444), b}), System.out);
 		}
 		catch (Exception e)
 		{
@@ -74,7 +76,7 @@ public class Serializer {
 			}
 			else
 			{
-				System.err.println("Object " + obj.getClass().getName()+ "@" + obj.hashCode() + " already serialized, skipping");
+				System.err.println("Object " + toSerialize.get(0).getClass().getName()+ "@" + toSerialize.get(0).hashCode() + " already serialized, skipping");
 			}
 			toSerialize.remove(0);
 		}
