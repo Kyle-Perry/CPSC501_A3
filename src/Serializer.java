@@ -54,7 +54,8 @@ public class Serializer {
 		Document aDoc = ser.serialize(a);
 		XMLOutputter xOut = new XMLOutputter(Format.getPrettyFormat());
 		try {
-			xOut.output(aDoc, System.out);	
+			//xOut.output(aDoc, System.out);	
+			xOut.output(ser.serialize(new Test[] {ser.new Test(1,"aa",false,1.1), ser.new Test(2,"bbb",true,2.22),ser.new Test(3,"cccc",false, 3.333), ser.new Test(4,"ddddd",true, 4.4444)}), System.out);
 		}
 		catch (Exception e)
 		{
@@ -105,7 +106,16 @@ public class Serializer {
 		objElement.setAttribute("length", ""+ Array.getLength(obj));
 
 		for(int i = 0; i < Array.getLength(obj); i++) {
-			objElement.addContent(serializeValue(Array.get(obj, i)));
+			
+			if(!obj.getClass().getComponentType().isPrimitive() || obj.getClass().equals(String.class))
+			{
+				objElement.addContent(serializeRef(Array.get(obj, i)));
+				toSerialize.add(Array.get(obj, i));
+			}
+			else
+			{
+				objElement.addContent(serializeValue(Array.get(obj, i)));
+			}
 		}
 		
 		return objElement;	
