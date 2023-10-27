@@ -1,8 +1,8 @@
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 
-import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
@@ -13,7 +13,7 @@ public class Serializer {
 		toSerialize = new ArrayList<Object>();
 		serialized = new ArrayList<Integer>();
 	}
-
+	
 	private ArrayList<Object> toSerialize;
 	private ArrayList<Integer> serialized;
 
@@ -25,8 +25,15 @@ public class Serializer {
 		Test2 c = new Test2(100, "Test1", true, 3.14, new int[] {1, 2 ,3});
 		Test d = new Test(1000, "This Test should appear once", true, 0.000000013);
 
+		ArrayList<Object> aList = new ArrayList<Object>();
+		aList.add("2 is prime");
+		aList.add("3 is prime");
+		aList.add("5 is prime");
+		aList.add("7 is prime");
+		aList.add(c);
+		
 		Document aDoc;
-		aDoc = ser.serialize(new Object[] {d, c, d, new int[] {6, 5, 4, 3, 2, 1}, "Hello, world!", new char[][] {new char[] {'a','b','c'},new char[] {'d','e','f'},new char[] {'g','h','i'}}});
+		aDoc = ser.serialize(new Object[] {a, b, d, d, new int[] {6, 5, 4, 3, 2, 1}, "Hello, world!", new char[][] {new char[] {'a','b','c'},new char[] {'d','e','f'},new char[] {'g','h','i'}}, aList});
 		XMLOutputter xOut = new XMLOutputter(Format.getPrettyFormat());
 		try {
 			xOut.output(aDoc, System.out);
@@ -59,9 +66,13 @@ public class Serializer {
 	}
 
 	public Element serializeObject(Object obj) {
-		Class objClass = obj.getClass();
+		Class<?> objClass = obj.getClass();
+		
 		if(objClass.isArray())
 			return serializeArray(obj);
+		
+		if(obj instanceof Collection<?>)
+			return serializeCollection((Collection<?>)obj);
 
 		Element objElement = new Element("object");
 		Field[] fields;
@@ -91,24 +102,47 @@ public class Serializer {
 
 			if(obj.getClass().getComponentType().isPrimitive())
 			{
-				objElement.addContent(serializeValue(Array.get(obj, i)));
+				objElement.addContent(serializeValue(indexObj));
 			}
-			else if(indexObj.getClass().equals(String.class))
+			else if (indexObj.getClass().equals(String.class))
 			{
-				objElement.addContent(serializeValue(Array.get(obj, i)));
+				objElement.addContent(serializeValue(indexObj));
 			}
 			else
 			{
-
-				objElement.addContent(serializeRef(Array.get(obj, i)));
+				objElement.addContent(serializeRef(indexObj));
 				toSerialize.add(indexObj);
-
 			}
 		}
 
 		return objElement;	
 	}
 
+	public Element serializeCollection(Collection<?> obj) {
+		Element objElement = new Element("object");
+		objElement.setAttribute("class", obj.getClass().getName());
+		objElement.setAttribute("id", obj.hashCode() + "");
+		
+		for(Object indexObj: obj) {
+			System.out.println(indexObj + " " + indexObj.getClass());
+			if(indexObj.getClass().isPrimitive())
+			{
+				objElement.addContent(serializeValue(indexObj));
+			}
+			else if (indexObj.getClass().equals(String.class))
+			{
+				objElement.addContent(serializeValue(indexObj));
+			}
+			else
+			{
+				objElement.addContent(serializeRef(indexObj));
+				toSerialize.add(indexObj);
+			}
+		}
+		
+		return objElement;
+	}
+	
 	public Element serializeField(Object obj, Field field) {
 		Element fieldElement = new Element("field");
 		Object fieldObj;

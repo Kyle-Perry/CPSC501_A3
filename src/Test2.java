@@ -1,5 +1,3 @@
-
-
 public class Test2 extends Test{
 	public int[] val5;
 	public Test other;
