@@ -13,7 +13,7 @@ public class Test {
 	public int val1;
 	public String val2;
 	public boolean val3;
-	public double val4;
+	public static double val4;
 
 	public String toString()
 	{

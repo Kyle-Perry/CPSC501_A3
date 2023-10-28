@@ -14,6 +14,11 @@ public class Test2 extends Test{
 	
 	public String toString()
 	{
-		return val1 + " "  + val2 + " " + val3 + " " + val4 + " " + val5 + " " + other;
+		 String s = val1 + " "  + val2 + " " + val3 + " " + val4 + " " + val5 + " ";
+		 if(this.other == null)
+			 s += null;
+		 else
+			 s += other.hashCode();
+		 return s;
 	}
 }

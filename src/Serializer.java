@@ -1,5 +1,6 @@
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -49,14 +50,15 @@ public class Serializer {
 
 		Element objElement = new Element("object");
 		Field[] fields;
-
+		Modifier m;
 		objElement.setAttribute("class", objClass.getName());
 		objElement.setAttribute("id", obj.hashCode() + "");
 		while(objClass!= null)
 		{
 			fields = objClass.getDeclaredFields();
 			for(Field f: fields) {
-				objElement.addContent(serializeField(obj, f));
+				if(!Modifier.isStatic(f.getModifiers()))
+					objElement.addContent(serializeField(obj, f));
 			}
 			objClass = objClass.getSuperclass();
 		}
