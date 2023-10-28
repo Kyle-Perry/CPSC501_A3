@@ -4,14 +4,14 @@ import org.jdom2.Element;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jdom2.Attribute;
 import org.jdom2.Content;
 
 public class Deserializer {
-	IdentityHashMap<String, Object> deserialized;
+	HashMap<Integer, Object> deserialized;
 
 	public Object deserialize(Document document) {
 		Element root = document.getRootElement();
@@ -19,16 +19,17 @@ public class Deserializer {
 		Element headEle;
 		Object cur;
 		Class curClass;
-		deserialized = new IdentityHashMap<String, Object>();
+		deserialized = new HashMap<Integer, Object>();
 		
 		generateMap(root);
 		try {
 			headEle = (Element)root.getContent(0);
 
-			head = deserialized.get(headEle.getAttributes().get(1).getValue());
+			head = deserialized.get(headEle.getAttributes().get(1).getIntValue());
 
 			for(Content c: root.getContent()) {
-				cur = deserialized.get(((Element)c).getAttributes().get(1).getValue());
+				cur = deserialized.get((Integer.parseInt(((Element)c).getAttributeValue("id"))));
+
 				curClass = cur.getClass();
 				if(curClass.isArray())
 				{
@@ -72,7 +73,8 @@ public class Deserializer {
 						dummy = classObj.newInstance();
 
 					}
-					deserialized.put(attributes.get(1).getValue(), dummy);
+					System.out.println(attributes.get(1).getIntValue());
+					deserialized.put(attributes.get(1).getIntValue(), dummy);
 				}
 				catch(Exception e) {
 					e.printStackTrace();
@@ -110,12 +112,11 @@ public class Deserializer {
 			e = (Element)contents.get(i);
 			if(e.getName().equals("reference"))
 			{
-				if(e.getContent(0).getValue().equals("null"))
+				if(e.getContent(0).getValue().equals("null")) 
 					obj.add(null);
-				for(String key: deserialized.keySet()) {
-					if(key.equals(e.getContent(0).getValue()))
-						obj.add(deserialized.get(key));
-				}
+				else
+					obj.add(deserialized.get(Integer.parseInt(e.getContent(0).getValue())));
+				
 			}
 			else
 			{
@@ -154,10 +155,9 @@ public class Deserializer {
 		if(e.getName().equals("reference")) {
 			if(valueText.equals("null"))
 				return null;
-			for(String key: deserialized.keySet()) {
-				if(key.equals(valueText))
-					return deserialized.get(key);
-			}
+			else
+				return deserialized.get(Integer.parseInt(e.getContent(0).getValue()));
+			
 		}
 		
 		if(type == Integer.TYPE) 
