@@ -12,6 +12,11 @@ public class Test {
 	
 	public int val1;
 	public String val2;
-	private boolean val3;
+	public boolean val3;
 	public double val4;
+
+	public String toString()
+	{
+		return val1 + " " + val2 + " " + val3 + " " + val4;
+	}
 }

@@ -12,7 +12,7 @@ public class Runner {
 		String a = "This is a test.";
 		char[] b = new char[] {'t','h','i','s',' ','s','h','o','u','l','d',' ','a','p','p','e','a','r',' ','o','n','c','e'};
 		Test2 c = new Test2(100, "Test1", true, 3.14, new int[] {1, 2 ,3});
-		Test d = new Test(1000, "This Test should appear once", true, 0.000000013);
+		Test d = new Test(1000, "This Test should appear once", false, 0.000000013);
 
 		ArrayList<Object> aList = new ArrayList<Object>();
 		aList.add("2 is prime");
