@@ -52,7 +52,6 @@ public class Deserializer {
 			head = null;
 		}
 
-		System.out.println(head);
 		return head;
 	}
 
@@ -73,7 +72,6 @@ public class Deserializer {
 						dummy = classObj.newInstance();
 
 					}
-					System.out.println(attributes.get(1).getIntValue());
 					deserialized.put(attributes.get(1).getIntValue(), dummy);
 				}
 				catch(Exception e) {
@@ -89,17 +87,10 @@ public class Deserializer {
 		List<Content> contents = objElement.getContent();
 		Element e;
 		
-		System.out.print(obj + " [");
 		for(int i = 0; i < contents.size(); i++) {
 			e = (Element)contents.get(i);
 			Array.set(obj, i, getObject(e, arrayType));
-			System.out.print(Array.get(obj, i));
-			if(i < contents.size()-1)
-			{
-				System.out.print(", ");
-			}
 		}
-		System.out.println("] is an array");
 		
 	}
 
@@ -123,7 +114,6 @@ public class Deserializer {
 				obj.add(e.getContent(0).getValue());
 			}
 		}
-		System.out.println(obj + " is a collection");
 
 	}
 
@@ -145,7 +135,6 @@ public class Deserializer {
 			
 		}
 		}
-		System.out.println(obj);
 
 	}
 	

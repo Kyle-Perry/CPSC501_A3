@@ -9,6 +9,10 @@ public class Runner {
 		// TODO Auto-generated method stub
 		Serializer ser = new Serializer();
 		Deserializer deser = new Deserializer();
+		Inspector insp = new Inspector();
+		
+		Object head;
+		
 		String a = "This is a test.";
 		char[] b = new char[] {'t','h','i','s',' ','s','h','o','u','l','d',' ','a','p','p','e','a','r',' ','o','n','c','e'};
 		Test2 c = new Test2(100, "Test1", true, 3.14, new int[] {1, 2 ,3});
@@ -31,6 +35,13 @@ public class Runner {
 		{
 			e.printStackTrace();
 		}
-		deser.deserialize(aDoc);
+		head = deser.deserialize(aDoc);
+		
+		System.out.println("======================================================================");
+		
+		insp.inspect(head);
+
+		System.out.println("======================================================================");
+				
 	}
 }
