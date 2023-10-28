@@ -97,11 +97,11 @@ public class Deserializer {
 		Field f;
 		Element fValue;
 		String valueText;
-		
+			
 		for(Content c: objElement.getContent())
 		{
 			try {
-				f = objClass.getField(((Element)c).getAttributeValue("name"));
+				f = Class.forName(((Element)c).getAttribute("declaringclass").getValue()).getDeclaredField(((Element)c).getAttributeValue("name"));
 				f.setAccessible(true);
 				fValue = ((Element)((Element)c).getContent().get(0));
 				valueText = fValue.getContent().get(0).getValue();
@@ -112,9 +112,7 @@ public class Deserializer {
 						if(key.equals(valueText))
 						{
 							Object keyObj = deserialized.get(key);
-							System.out.println("key found, setting reference for field " + f.getName() +": " + keyObj);
 							f.set(obj, keyObj);
-							System.out.println(f.get(obj));
 							break;
 						}
 					}
@@ -152,20 +150,11 @@ public class Deserializer {
 				}
 				else
 					f.set(obj, null);
-			} catch (SecurityException | NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
 			
-		}		
+		}
+		}
 		System.out.println(obj + " is an object");
 
 	}
