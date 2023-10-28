@@ -14,11 +14,11 @@ public class Test2 extends Test{
 	
 	public String toString()
 	{
-		 String s = val1 + " "  + val2 + " " + val3 + " " + val4 + " " + val5 + " ";
+		 String s = "(" + val1 + " "  + val2 + " " + val3 + " " + val4 + " " + val5 + " ";
 		 if(this.other == null)
 			 s += null;
 		 else
 			 s += other.hashCode();
-		 return s;
+		 return s + ")";
 	}
 }

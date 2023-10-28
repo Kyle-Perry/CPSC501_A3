@@ -34,9 +34,9 @@ public class Deserializer {
 				{
 					deserializeArray(cur, (Element)c);
 				}
-				else if(cur instanceof Collection<?>)
+				else if(cur instanceof Collection)
 				{
-					deserializeCollection(cur, (Element)c);
+					deserializeCollection((Collection)cur, (Element)c);
 				}
 				else
 				{
@@ -87,15 +87,41 @@ public class Deserializer {
 		List<Content> contents = objElement.getContent();
 		Element e;
 		
+		System.out.print(obj + " [");
 		for(int i = 0; i < contents.size(); i++) {
 			e = (Element)contents.get(i);
-			
+			Array.set(obj, i, getObject(e, arrayType));
+			System.out.print(Array.get(obj, i));
+			if(i < contents.size()-1)
+			{
+				System.out.print(", ");
+			}
 		}
+		System.out.println("] is an array");
 		
-		System.out.println(obj + " is an array");
 	}
 
-	private void deserializeCollection(Object obj, Element objElement) {
+	private void deserializeCollection(Collection<Object> obj, Element objElement) {
+		List<Content> contents = objElement.getContent();
+		
+		Element e;
+		
+		for(int i = 0; i < contents.size(); i++) {
+			e = (Element)contents.get(i);
+			if(e.getName().equals("reference"))
+			{
+				if(e.getContent(0).getValue().equals("null"))
+					obj.add(null);
+				for(String key: deserialized.keySet()) {
+					if(key.equals(e.getContent(0).getValue()))
+						obj.add(deserialized.get(key));
+				}
+			}
+			else
+			{
+				obj.add(e.getContent(0).getValue());
+			}
+		}
 		System.out.println(obj + " is a collection");
 
 	}
