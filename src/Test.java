@@ -6,6 +6,10 @@ public class Test {
 		this.val4 = val4;
 	}
 
+	public Test() {
+		
+	}
+	
 	public int val1;
 	public String val2;
 	private boolean val3;

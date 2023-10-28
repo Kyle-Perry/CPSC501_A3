@@ -8,4 +8,7 @@ public class Test2 extends Test{
 		this.other = this;
 	}
 
+	public Test2() {
+		super();
+	}
 }
