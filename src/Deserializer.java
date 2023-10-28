@@ -2,9 +2,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Parameter;
 import java.util.IdentityHashMap;
 import java.util.List;
 
@@ -15,9 +12,19 @@ public class Deserializer {
 	IdentityHashMap<Integer, Object> deserialized = new IdentityHashMap<Integer, Object>();
 
 	public Object deserialize(Document document) {
+		
+		Element root = document.getRootElement();
+		generateMap(root);
+		
+		System.out.println(deserialized);
+		return new Object();
+	}
+
+	private void generateMap(Element root)
+	{
 		Object dummy;
 		
-		for(Content obj: document.getRootElement().getContent()) {
+		for(Content obj: root.getContent()) {
 			if(obj instanceof Element) {
 				List<Attribute> attributes = ((Element) obj).getAttributes();
 				try {					
@@ -25,8 +32,6 @@ public class Deserializer {
 
 					if(attributes.size() == 3) {
 						dummy = Array.newInstance(classObj, attributes.get(2).getIntValue());
-						Constructor c = classObj.getConstructor(null);
-						Parameter[] p = c.getParameters();
 					}
 					else {
 						dummy = classObj.newInstance();
@@ -40,8 +45,5 @@ public class Deserializer {
 
 			}
 		}
-		System.out.println(deserialized);
-
-		return new Object();
 	}
 }
