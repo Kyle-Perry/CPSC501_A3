@@ -83,7 +83,15 @@ public class Deserializer {
 	}
 
 	private void deserializeArray(Object obj, Element objElement) {
-
+		Class<?> arrayType = obj.getClass().getComponentType();
+		List<Content> contents = objElement.getContent();
+		Element e;
+		
+		for(int i = 0; i < contents.size(); i++) {
+			e = (Element)contents.get(i);
+			
+		}
+		
 		System.out.println(obj + " is an array");
 	}
 
@@ -93,7 +101,6 @@ public class Deserializer {
 	}
 
 	private void deserializeObject(Object obj, Element objElement) {
-		Class objClass = obj.getClass();
 		Field f;
 		Element fValue;
 		String valueText;
@@ -104,58 +111,59 @@ public class Deserializer {
 				f = Class.forName(((Element)c).getAttribute("declaringclass").getValue()).getDeclaredField(((Element)c).getAttributeValue("name"));
 				f.setAccessible(true);
 				fValue = ((Element)((Element)c).getContent().get(0));
-				valueText = fValue.getContent().get(0).getValue();
-				if(valueText != "null")
-				{
-				if(fValue.getName() == "reference") {
-					for(String key: deserialized.keySet()) {
-						if(key.equals(valueText))
-						{
-							Object keyObj = deserialized.get(key);
-							f.set(obj, keyObj);
-							break;
-						}
-					}
-				}
-				else if(f.getType() == Integer.TYPE) {
-					f.set(obj, Integer.parseInt(valueText));
-				}
-				else if(f.getType() == Boolean.TYPE) {
-					if(valueText.contains("true"))
-						f.set(obj, true);
-					else
-						f.set(obj, false);
-				}
-				else if(f.getType() == Double.TYPE) {
-					f.set(obj, Double.parseDouble(valueText));
-				}
-				else if(f.getType() == Short.TYPE) {
-					f.set(obj, Short.parseShort(valueText));
-				}
-				else if(f.getType() == Long.TYPE) {
-					f.set(obj, Long.parseLong(valueText));
-				}
-				else if(f.getType() == Byte.TYPE) {
-					f.set(obj, Byte.parseByte(valueText));
-				}
-				else if(f.getType() == Float.TYPE) {
-					f.set(obj, Float.parseFloat(valueText));
-				}
-				else if(f.getType() == Character.TYPE) {
-					f.set(obj, valueText.charAt(0));
-				}
-				else if(f.getType() == java.lang.String.class) {
-					f.set(obj, valueText);
-				}
-				}
-				else
-					f.set(obj, null);
+				f.set(obj, getObject(fValue, f.getType()));
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			
 		}
 		}
-		System.out.println(obj + " is an object");
+		System.out.println(obj);
 
+	}
+	
+	private Object getObject(Element e, Class type) {
+		String valueText = e.getContent().get(0).getValue();
+	
+		if(e.getName().equals("reference")) {
+			if(valueText.equals("null"))
+				return null;
+			for(String key: deserialized.keySet()) {
+				if(key.equals(valueText))
+					return deserialized.get(key);
+			}
+		}
+		
+		if(type == Integer.TYPE) 
+			return Integer.parseInt(valueText);
+		
+		if(type == Boolean.TYPE) {
+			if(valueText.contains("true"))
+				return true;
+			else return false;
+		}
+		
+		if(type == Double.TYPE) 
+			return Double.parseDouble(valueText);
+		
+		if(type == Short.TYPE) 
+			return Short.parseShort(valueText);
+		
+		if(type == Long.TYPE) 
+			return Long.parseLong(valueText);
+		
+		if(type == Byte.TYPE) 
+			return Byte.parseByte(valueText);
+		
+		if(type == Float.TYPE) 
+			return Float.parseFloat(valueText);
+		
+		if(type == Character.TYPE) 
+			return valueText.charAt(0);
+		
+		if(type == java.lang.String.class) 
+			return valueText;	
+	
+		return null;
 	}
 }
