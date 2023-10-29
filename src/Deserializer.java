@@ -176,9 +176,8 @@ public class Deserializer {
 		if(type == Character.TYPE) 
 			return valueText.charAt(0);
 		
-		if(type == java.lang.String.class) 
-			return valueText;	
+		return valueText;	
 	
-		return null;
+
 	}
 }
