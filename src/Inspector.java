@@ -28,14 +28,11 @@ public class Inspector {
 		Class classObj = obj.getClass();
 		Field[] fields;
 		Object cur;
-		;
+		
+		System.out.println(addTabbing() + "Class: " + classObj + "\n");
+
 
 		addressesViewed.add(obj.hashCode());
-		while(classObj != null) {
-			System.out.println(addTabbing() + "Class: " + classObj + "\n");
-			if(classObj.isArray()) {
-				for(int i = 0; i < Array.getLength(obj); i++) {
-					cur = Array.get(obj, i);
 
 		if(classObj.isArray()) {
 			for(int i = 0; i < Array.getLength(obj); i++) {
