@@ -15,43 +15,44 @@ public class Deserializer {
 
 	public Object deserialize(Document document) {
 		Element root = document.getRootElement();
-		Object head;
+		Object head = null;
 		Element headEle;
 		Object cur;
 		Class curClass;
 		deserialized = new HashMap<Integer, Object>();
-		
-		generateMap(root);
-		try {
-			headEle = (Element)root.getContent(0);
 
-			head = deserialized.get(headEle.getAttributes().get(1).getIntValue());
+		if(root.getContent().size() > 0) {
+			generateMap(root);
+			try {
+				headEle = (Element)root.getContent(0);
 
-			for(Content c: root.getContent()) {
-				cur = deserialized.get((Integer.parseInt(((Element)c).getAttributeValue("id"))));
+				head = deserialized.get(headEle.getAttributes().get(1).getIntValue());
 
-				curClass = cur.getClass();
-				if(curClass.isArray())
-				{
-					deserializeArray(cur, (Element)c);
+				for(Content c: root.getContent()) {
+					cur = deserialized.get((Integer.parseInt(((Element)c).getAttributeValue("id"))));
+
+					curClass = cur.getClass();
+					if(curClass.isArray())
+					{
+						deserializeArray(cur, (Element)c);
+					}
+					else if(cur instanceof Collection)
+					{
+						deserializeCollection((Collection)cur, (Element)c);
+					}
+					else
+					{
+						deserializeObject(cur, (Element)c);
+					}
 				}
-				else if(cur instanceof Collection)
-				{
-					deserializeCollection((Collection)cur, (Element)c);
-				}
-				else
-				{
-					deserializeObject(cur, (Element)c);
-				}
+
 			}
-
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				head = null;
+			}
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			head = null;
-		}
-
 		return head;
 	}
 
@@ -86,19 +87,19 @@ public class Deserializer {
 		Class<?> arrayType = obj.getClass().getComponentType();
 		List<Content> contents = objElement.getContent();
 		Element e;
-		
+
 		for(int i = 0; i < contents.size(); i++) {
 			e = (Element)contents.get(i);
 			Array.set(obj, i, getObject(e, arrayType));
 		}
-		
+
 	}
 
 	private void deserializeCollection(Collection<Object> obj, Element objElement) {
 		List<Content> contents = objElement.getContent();
-		
+
 		Element e;
-		
+
 		for(int i = 0; i < contents.size(); i++) {
 			e = (Element)contents.get(i);
 			if(e.getName().equals("reference"))
@@ -107,7 +108,7 @@ public class Deserializer {
 					obj.add(null);
 				else
 					obj.add(deserialized.get(Integer.parseInt(e.getContent(0).getValue())));
-				
+
 			}
 			else
 			{
@@ -121,7 +122,7 @@ public class Deserializer {
 		Field f;
 		Element fValue;
 		String valueText;
-			
+
 		for(Content c: objElement.getContent())
 		{
 			try {
@@ -129,55 +130,55 @@ public class Deserializer {
 				f.setAccessible(true);
 				fValue = ((Element)((Element)c).getContent().get(0));
 				f.set(obj, getObject(fValue, f.getType()));
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
-			
-		}
+
+			}
 		}
 
 	}
-	
+
 	private Object getObject(Element e, Class type) {
 		String valueText = e.getContent().get(0).getValue();
-	
+
 		if(e.getName().equals("reference")) {
 			if(valueText.equals("null"))
 				return null;
 			else
 				return deserialized.get(Integer.parseInt(e.getContent(0).getValue()));
-			
+
 		}
-		
+
 		if(type == Integer.TYPE) 
 			return Integer.parseInt(valueText);
-		
+
 		if(type == Boolean.TYPE) {
 			if(valueText.contains("true"))
 				return true;
 			else return false;
 		}
-		
+
 		if(type == Double.TYPE) 
 			return Double.parseDouble(valueText);
-		
+
 		if(type == Short.TYPE) 
 			return Short.parseShort(valueText);
-		
+
 		if(type == Long.TYPE) 
 			return Long.parseLong(valueText);
-		
+
 		if(type == Byte.TYPE) 
 			return Byte.parseByte(valueText);
-		
+
 		if(type == Float.TYPE) 
 			return Float.parseFloat(valueText);
-		
+
 		if(type == Character.TYPE) 
 			return valueText.charAt(0);
-		
+
 		return valueText;	
-	
+
 
 	}
 }
