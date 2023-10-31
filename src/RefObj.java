@@ -16,6 +16,6 @@ public class RefObj {
 	{
 		if(this.ref == null)
 			return null;
-		return this.getClass() + "@" + this.hashCode() ": \"" + this.ref.getClass() + "@" + this.ref.hashCode() + "\"";
+		return this.getClass() + "@" + this.hashCode() + ": \"" + this.ref.getClass() + "@" + this.ref.hashCode() + "\"";
 	}
 }
