@@ -131,7 +131,20 @@ public class ObjCreator {
 	}
 
 	private RefArrObj createRefArrObj() {
-		return null;
+		RefArrObj created = new RefArrObj();
+		
+		createdObjs.add(created);
+		Object[] myArr;
+		int len;
+		
+		System.out.println("Please enter a length for the array from 1 to " + MAX_ARRAY_LENGTH);
+		len = getInt(0, MAX_ARRAY_LENGTH);
+		
+		created.arrObjects = new Object[len];
+		for(int i = 0; i < created.arrObjects.length; i++)
+			created.arrObjects[i] = createSubObject();
+
+		return created;
 	}
 
 	private CollectionObj createCollectionObj() {
