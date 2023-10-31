@@ -2,9 +2,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ObjCreator {
-	ArrayList<Object> createdObjs;
-	Scanner userIn;
-
+	private ArrayList<Object> createdObjs;
+	private Scanner userIn;
+	private static final int MAX_ARRAY_LENGTH = 10;
+	
 	public ObjCreator() {
 		super();
 		createdObjs = new ArrayList<Object>();
@@ -79,7 +80,16 @@ public class ObjCreator {
 	}
 
 	private PrimArrObj createPrimArrObj() {
-		return null;
+		int[] myArr;
+		int len;
+		
+		System.out.println("Please enter a length for the array from 1 to " + MAX_ARRAY_LENGTH);
+		len = getInt(0, MAX_ARRAY_LENGTH);
+		
+		myArr = new int[len];
+		for(int i = 0; i < myArr.length; i++)
+			myArr[i] = 	getInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		return new PrimArrObj(myArr);
 	}
 
 	private RefArrObj createRefArrObj() {
