@@ -50,8 +50,9 @@ public class Inspector {
 			}
 		}
 		if(obj instanceof Collection) {
+			int x = 0;
+
 			for(Object o: (Collection<Object>)obj) {
-				int x = 0;
 				System.out.println(addTabbing() + "Element " + x + " of collection: " + o);
 
 				if(!o.getClass().isPrimitive() && !(o.getClass() == java.lang.String.class) && o != null) {
@@ -61,8 +62,9 @@ public class Inspector {
 
 					inspect(o);
 					System.out.println(addTabbing() + "----------------------------------------------------------------------");
-					x++;
 				}
+				x++;
+
 			}
 		}
 		else {
