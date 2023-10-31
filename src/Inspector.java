@@ -30,7 +30,7 @@ public class Inspector {
 		Object cur;
 		
 		System.out.println(addTabbing() + "Class: " + classObj + "\n");
-
+		System.out.println(addTabbing() + "Hashcode: " + obj.hashCode() + "\n");
 
 		addressesViewed.add(obj.hashCode());
 
