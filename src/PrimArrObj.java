@@ -11,5 +11,8 @@ public class PrimArrObj {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	public String toString() {
+		return this.intArray.toString();
+	}
 }

@@ -13,5 +13,8 @@ public class CollectionObj {
 		this.collection = collection;
 	}
 	
+	public String toString() {
+		return this.collection.toString();
+	}
 	
 }

@@ -53,6 +53,8 @@ public class ObjCreator {
 	private Object createSubObject() {
 		Object newObject = null;
 		int selection;
+		int targetObj;
+		
 		try {
 			selection = getMenuSelection(new String[] {"What would you like to refer to in this field:",
 					"0) A new object containing primitive fields",
@@ -61,6 +63,31 @@ public class ObjCreator {
 					"3) A new object containing a array of object references",
 					"4) A new object containing a collection of objects",
 			"5) A reference to a previously created object"}, 6);
+			switch(selection) {
+			case 0:
+				newObject = createPrimObj();
+				break;
+			case 1:
+				newObject = createRefObj();
+				break;
+			case 2:
+				newObject = createPrimArrObj();
+				break;
+			case 3:
+				newObject = createRefArrObj();
+				break;
+			case 4:
+				newObject = createCollectionObj();
+				break;
+			case 5:
+				printElements();
+				targetObj = getInt(0, createdObjs.size() - 1);
+				newObject = createdObjs.get(targetObj);
+				
+				break;
+			default:
+				break;
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -71,15 +98,22 @@ public class ObjCreator {
 
 	private PrimObj createPrimObj() {
 		int val1 = 0, val2 = 0;
-
-		return new PrimObj(getInt(Integer.MIN_VALUE, Integer.MAX_VALUE), getInt(Integer.MIN_VALUE, Integer.MAX_VALUE));
+		PrimObj created = new PrimObj(getInt(Integer.MIN_VALUE, Integer.MAX_VALUE), getInt(Integer.MIN_VALUE, Integer.MAX_VALUE));
+		
+		createdObjs.add(created);
+		return created;
 	}
 
 	private RefObj createRefObj() {
-		return null;
+		RefObj created = new RefObj();
+		
+		createdObjs.add(created);
+		created.ref = createSubObject();
+		return created;
 	}
 
 	private PrimArrObj createPrimArrObj() {
+		PrimArrObj created;
 		int[] myArr;
 		int len;
 		
@@ -89,7 +123,11 @@ public class ObjCreator {
 		myArr = new int[len];
 		for(int i = 0; i < myArr.length; i++)
 			myArr[i] = 	getInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
-		return new PrimArrObj(myArr);
+		created =  new PrimArrObj(myArr);
+		createdObjs.add(created);
+		
+		return created;
+		
 	}
 
 	private RefArrObj createRefArrObj() {
@@ -98,12 +136,6 @@ public class ObjCreator {
 
 	private CollectionObj createCollectionObj() {
 		return null;
-	}
-
-	private Object getObjectRef(int index) throws IndexOutOfBoundsException{
-		if((index >= 0) && (index < createdObjs.size()))
-			return createdObjs.get(index);
-		throw new IndexOutOfBoundsException(index);
 	}
 
 	private int getMenuSelection(String[] menu, int max) {
@@ -147,5 +179,11 @@ public class ObjCreator {
 				e.getMessage();
 			}
 		}
+	}
+	
+	private void printElements() {
+		System.out.println("Previously created objects:");
+		for(Object o: createdObjs)
+			System.out.println(createdObjs.indexOf(o) + ") " + o);
 	}
 }

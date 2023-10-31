@@ -12,4 +12,7 @@ public class RefArrObj {
 		this.arrObjects = arrObjects;
 	}
 
+	public String toString() {
+		return this.arrObjects.toString();
+	}
 }

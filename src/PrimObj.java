@@ -14,5 +14,7 @@ public class PrimObj {
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	public String toString() {
+		return "(" + this.val1 + ", " + this.val2 + ")"; 
+	}
 }

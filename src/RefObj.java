@@ -12,4 +12,10 @@ public class RefObj {
 		this.ref = ref;
 	}
 	
+	public String toString()
+	{
+		if(this.ref == null)
+			return null;
+		return this.ref.getClass() + "@" + this.ref.hashCode();
+	}
 }
