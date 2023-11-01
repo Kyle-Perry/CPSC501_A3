@@ -14,13 +14,21 @@ public class Sender {
 		Serializer ser = new Serializer();
 		ObjCreator creator = new ObjCreator();
 		Document aDoc;
-	
+		
+		String ipAddress = "localhost";
+		int portNo = 5000;
+		if(args.length > 0)
+			ipAddress = args[0];
+		
+		if(args.length > 1)
+			portNo = Integer.parseInt(args[1]);
+		
 		Object target = creator.createObject();
 		
 		aDoc = ser.serialize(target);
 		XMLOutputter xOut = new XMLOutputter();
 		try {
-			Socket sendSock = new Socket("localhost", 8080);
+			Socket sendSock = new Socket(ipAddress, portNo);
 			System.out.println("Successfully connected to the server...");
 			
 			OutputStream output = sendSock.getOutputStream();
