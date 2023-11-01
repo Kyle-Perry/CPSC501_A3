@@ -21,8 +21,15 @@ public class Sender {
 			ipAddress = args[0];
 		
 		if(args.length > 1)
-			portNo = Integer.parseInt(args[1]);
-		
+			try {	
+				portNo = Integer.parseInt(args[1]);
+			}
+			catch(NumberFormatException e) {
+				System.err.println("Improper command-line argument given, expected a port number as an integer for the second argument.");
+				System.out.println("Using default port: 5000.");
+
+			}
+		}
 		Object target = creator.createObject();
 		
 		aDoc = ser.serialize(target);
