@@ -20,7 +20,7 @@ public class Sender {
 		if(args.length > 0)
 			ipAddress = args[0];
 		
-		if(args.length > 1)
+		if(args.length > 1) {
 			try {	
 				portNo = Integer.parseInt(args[1]);
 			}
