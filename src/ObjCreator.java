@@ -216,8 +216,10 @@ public class ObjCreator {
 				System.out.print("Please make a selection: ");
 
 				selection = userIn.nextInt();
-				if(selection <= max && selection >= 0)
+				if(selection <= max && selection >= 0) {
+					System.out.println();
 					return selection;
+			}
 				throw new IndexOutOfBoundsException("Invalid choice, please select a choice between 0 and " + max);
 			}
 			catch(Exception e)
@@ -235,8 +237,10 @@ public class ObjCreator {
 				System.out.print("Please enter an integer between " + min + " and " + max + ": ");
 
 				val = userIn.nextInt();
-				if(val <= max && val >= min)
+				if(val <= max && val >= min) {
+					System.out.println();
 					return val;
+				}
 				throw new IndexOutOfBoundsException("Integer out of range");
 			}
 			catch(Exception e)
