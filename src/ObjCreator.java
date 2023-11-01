@@ -151,6 +151,7 @@ public class ObjCreator {
 		ArrayList<Object> objects = new ArrayList<Object>();
 		Object newObject = null;
 		CollectionObj cObj = new CollectionObj(objects);
+		createdObjs.add(cObj);
 		int selection;
 		int targetObj;
 		while(true) {
