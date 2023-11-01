@@ -45,6 +45,11 @@ public class Sender {
 		
 			xOut.output(aDoc, byteOutput);
 
+
+			System.out.println("\nSerialization complete, document sent:");
+			xOut.setFormat(Format.getPrettyFormat());
+			xOut.output(aDoc, System.out);
+			
 			byte[] docBytes = byteOutput.toByteArray();
 			
 			buffOutput.write(docBytes);
