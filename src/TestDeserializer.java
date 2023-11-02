@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.Array;
 
+import java.util.ArrayList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.junit.*;
@@ -188,7 +189,51 @@ public class TestDeserializer {
 	
 	@Test
 	public void testCollectionObj() {
-		assertTrue(true);
+		Object testObj;
+		
+		Document tDoc = new Document();
+
+		Element root = new Element("serialized");
+		tDoc.setRootElement(root);
+
+		Element objElement = new Element("object");		
+		root.addContent(objElement);
+		
+		objElement.setAttribute("class", "java.util.ArrayList");
+		objElement.setAttribute("id", Integer.toString(1));
+			
+		Element f1 = new Element("value");
+		f1.setText("This should appear first.");
+		objElement.addContent(f1);
+		
+		Element f2 = new Element("value");
+		f2.setText("This should appear second.");
+		objElement.addContent(f2);
+		
+		Element f3 = new Element("reference");
+		f3.setText(Integer.toString(2));
+		objElement.addContent(f3);
+		
+		Element objElement2 = new Element("object");		
+		root.addContent(objElement2);
+		
+		objElement2.setAttribute("class", "RefObj");
+		objElement2.setAttribute("id", Integer.toString(2));
+		Element f4 = new Element("field");
+		
+		f4.setAttribute("name", "ref");
+		f4.setAttribute("declaringclass", "RefObj");			
+		f4.addContent(new Element("reference"));
+		((Element)f4.getContent(0)).setText(Integer.toString(1));
+		objElement2.addContent(f4);
+		
+		testObj = testDeser.deserialize(tDoc);
+		System.out.println(testObj);
+		
+		assertTrue(((ArrayList)testObj).get(0).equals("This should appear first.") );
+		assertTrue(((ArrayList)testObj).get(1).equals("This should appear second.") );
+		assertTrue(((ArrayList)testObj).get(2) instanceof RefObj);
+
 	}
 	
 }
