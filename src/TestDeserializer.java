@@ -228,7 +228,6 @@ public class TestDeserializer {
 		objElement2.addContent(f4);
 		
 		testObj = testDeser.deserialize(tDoc);
-		System.out.println(testObj);
 		
 		assertTrue(((ArrayList)testObj).get(0).equals("This should appear first.") );
 		assertTrue(((ArrayList)testObj).get(1).equals("This should appear second.") );
