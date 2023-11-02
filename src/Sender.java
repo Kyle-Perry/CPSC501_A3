@@ -2,7 +2,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import org.jdom2.Document;
 import org.jdom2.output.Format;

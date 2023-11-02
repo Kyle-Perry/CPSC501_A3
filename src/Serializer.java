@@ -6,8 +6,6 @@ import java.util.Collection;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 public class Serializer {
 	public Serializer() {
@@ -50,7 +48,7 @@ public class Serializer {
 
 		Element objElement = new Element("object");
 		Field[] fields;
-		Modifier m;
+
 		objElement.setAttribute("class", objClass.getName());
 		objElement.setAttribute("id", obj.hashCode() + "");
 		while(objClass!= null)

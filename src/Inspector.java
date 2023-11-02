@@ -1,6 +1,5 @@
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -25,7 +24,7 @@ public class Inspector {
 		}
 
 		tabbing++;
-		Class classObj = obj.getClass();
+		Class<?> classObj = obj.getClass();
 		Field[] fields;
 		Object cur;
 		

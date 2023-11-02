@@ -97,7 +97,6 @@ public class ObjCreator {
 	}
 
 	private PrimObj createPrimObj() {
-		int val1 = 0, val2 = 0;
 		PrimObj created = new PrimObj(getInt(Integer.MIN_VALUE, Integer.MAX_VALUE), getInt(Integer.MIN_VALUE, Integer.MAX_VALUE));
 
 		createdObjs.add(created);
@@ -134,7 +133,6 @@ public class ObjCreator {
 		RefArrObj created = new RefArrObj();
 
 		createdObjs.add(created);
-		Object[] myArr;
 		int len;
 
 		System.out.println("Please enter a length for the array from 1 to " + MAX_ARRAY_LENGTH);

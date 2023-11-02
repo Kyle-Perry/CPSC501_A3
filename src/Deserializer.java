@@ -2,6 +2,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class Deserializer {
 		Object head = null;
 		Element headEle;
 		Object cur;
-		Class curClass;
+		Class<?> curClass;
 		deserialized = new HashMap<Integer, Object>();
 
 		if(root.getContent().size() > 0) {
@@ -38,7 +39,7 @@ public class Deserializer {
 					}
 					else if(cur instanceof Collection)
 					{
-						deserializeCollection((Collection)cur, (Element)c);
+						deserializeCollection((Collection<Object>)cur, (Element)c);
 					}
 					else
 					{
@@ -59,6 +60,7 @@ public class Deserializer {
 	private void generateMap(Element root)
 	{
 		Object dummy;
+		Constructor<?> dummyCons;
 
 		for(Content obj: root.getContent()) {
 			if(obj instanceof Element) {
@@ -70,7 +72,11 @@ public class Deserializer {
 						dummy = Array.newInstance(classObj.getComponentType(), attributes.get(2).getIntValue());
 					}
 					else {
-						dummy = classObj.newInstance();
+						dummyCons = classObj.getDeclaredConstructor(null);
+						dummyCons.setAccessible(true);
+						dummy = dummyCons.newInstance(null);
+						
+						//dummy = classObj.newInstance();
 
 					}
 					deserialized.put(attributes.get(1).getIntValue(), dummy);
@@ -121,7 +127,6 @@ public class Deserializer {
 	private void deserializeObject(Object obj, Element objElement) {
 		Field f;
 		Element fValue;
-		String valueText;
 
 		for(Content c: objElement.getContent())
 		{
@@ -139,7 +144,7 @@ public class Deserializer {
 
 	}
 
-	private Object getObject(Element e, Class type) {
+	private Object getObject(Element e, Class<?> type) {
 		String valueText = e.getContent().get(0).getValue();
 
 		if(e.getName().equals("reference")) {
