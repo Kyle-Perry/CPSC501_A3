@@ -23,6 +23,7 @@ public class TestSerializer {
 		
 		Element objEle = (Element)root.getContent(0);
 		assertEquals(objEle.getAttribute("class").getValue(), "TestObj");
+		assertEquals(objEle.getAttribute("id").getValue(), Integer.toString(testObj.hashCode()));
 		
 		Element fieldEle = (Element)objEle.getContent(0);
 		assertEquals(fieldEle.getAttribute("name").getValue(), "val1");
@@ -80,6 +81,7 @@ public class TestSerializer {
 		
 		Element arrEle = (Element)root.getContent(0);
 		assertEquals(arrEle.getAttribute("class").getValue(), "[I");
+		assertEquals(arrEle.getAttribute("id").getValue(), Integer.toString(vals.hashCode()));
 		assertEquals(arrEle.getAttribute("length").getValue(), "3");
 
 		assertEquals(((Element)arrEle.getContent(0)).getText(), "100");
@@ -90,7 +92,32 @@ public class TestSerializer {
 	
 	@Test
 	public void testReference() {
-		assertTrue(true);
+		RefObj testObj = new RefObj();
+		RefObj testObj2 = new RefObj(testObj);
+		testObj.ref = testObj2;
+		
+		Document tDoc = testSer.serialize(testObj);
+		Element root = tDoc.getRootElement();
+		assertEquals(root.getContent().size(), 2);
+		
+		Element objEle = (Element)root.getContent(0);
+		assertEquals(objEle.getAttribute("class").getValue(), "RefObj");
+		assertEquals(objEle.getAttribute("id").getValue(), Integer.toString(testObj.hashCode()));
+
+		Element objEle2 = (Element)root.getContent(1);
+		assertEquals(objEle2.getAttribute("class").getValue(), "RefObj");
+		assertEquals(objEle2.getAttribute("id").getValue(), Integer.toString(testObj2.hashCode()));
+
+		Element fieldEle = (Element)objEle.getContent(0);
+		assertEquals(fieldEle.getAttribute("name").getValue(), "ref");
+		assertEquals(fieldEle.getAttribute("declaringclass").getValue(), "RefObj");
+		assertEquals(((Element)fieldEle.getContent(0)).getText(), Integer.toString(testObj2.hashCode()));
+		
+		Element fieldEle2 = (Element)objEle2.getContent(0);
+		assertEquals(fieldEle2.getAttribute("name").getValue(), "ref");
+		assertEquals(fieldEle2.getAttribute("declaringclass").getValue(), "RefObj");
+		assertEquals(((Element)fieldEle2.getContent(0)).getText(), Integer.toString(testObj.hashCode()));
+		
 	}
 	
 	@Test
