@@ -1,5 +1,5 @@
-public class Test {
-	public Test(int val1, short val2, long val3, byte val4, float val5, double val6, char val7, boolean val8,
+public class TestObj {
+	public TestObj(int val1, short val2, long val3, byte val4, float val5, double val6, char val7, boolean val8,
 			String val9) {
 		super();
 		this.val1 = val1;
@@ -13,9 +13,10 @@ public class Test {
 		this.val9 = val9;
 	}
 
-	public Test() {
-		
+	public TestObj() {
+		super();
 	}
+	
 	public int val1;
 	public short val2;
 	public long val3;
