@@ -1,4 +1,7 @@
 import static org.junit.Assert.*;
+
+import java.lang.reflect.Array;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.junit.*;
@@ -106,19 +109,82 @@ public class TestDeserializer {
 	}
 	
 	@Test
-	public void testPrimArrObj() {
-		assertTrue(true);
+	public void testArray() {
+		Object testObj;
+		
+		Document tDoc = new Document();
+
+		Element root = new Element("serialized");
+		tDoc.setRootElement(root);
+
+		Element objElement = new Element("object");		
+		root.addContent(objElement);
+		
+		objElement.setAttribute("class", "[I");
+		objElement.setAttribute("id", Integer.toString(1));
+		objElement.setAttribute("length", Integer.toString(3));
+		
+		Element valElem = new Element("value");
+		valElem.setText(Integer.toString(55));
+		objElement.addContent(valElem);
+		
+		valElem = new Element("value");
+		valElem.setText(Integer.toString(-78451335));
+		objElement.addContent(valElem);
+		
+		valElem = new Element("value");
+		valElem.setText(Integer.toString(958145668));
+		objElement.addContent(valElem);
+		
+		testObj = testDeser.deserialize(tDoc);
+		
+		assertEquals(Array.get(testObj, 0), 55);
+		assertEquals(Array.get(testObj, 1), -78451335);
+		assertEquals(Array.get(testObj, 2), 958145668);
+		
 	}
 	
 	@Test
-	public void testRefObj() {
-		assertTrue(true);
+	public void testReference() {
+		Object testObj;
+		
+		Document tDoc = new Document();
+
+		Element root = new Element("serialized");
+		tDoc.setRootElement(root);
+
+		Element objElement = new Element("object");		
+		root.addContent(objElement);
+		
+		objElement.setAttribute("class", "RefObj");
+		objElement.setAttribute("id", Integer.toString(1));
+				
+		Element f1 = new Element("field");
+		f1.setAttribute("name", "ref");
+		f1.setAttribute("declaringclass", "RefObj");			
+		f1.addContent(new Element("reference"));
+		((Element)f1.getContent(0)).setText(Integer.toString(2));
+		objElement.addContent(f1);
+		
+		Element objElement2 = new Element("object");		
+		root.addContent(objElement2);
+		
+		objElement2.setAttribute("class", "RefObj");
+		objElement2.setAttribute("id", Integer.toString(2));
+		Element f2 = new Element("field");
+		
+		f2.setAttribute("name", "ref");
+		f2.setAttribute("declaringclass", "RefObj");			
+		f2.addContent(new Element("reference"));
+		((Element)f2.getContent(0)).setText(Integer.toString(2));
+		objElement2.addContent(f2);
+		
+		testObj = testDeser.deserialize(tDoc);
+		Object testRef = ((RefObj)testObj).ref;
+		assertEquals(((RefObj)testObj).ref, testRef);
+		assertEquals(((RefObj)testRef).ref, testRef);		
 	}
 	
-	@Test
-	public void testRefArrObj() {
-		assertTrue(true);
-	}
 	
 	@Test
 	public void testCollectionObj() {
