@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.junit.*;
@@ -122,7 +124,24 @@ public class TestSerializer {
 	
 	@Test
 	public void testCollectionObj() {
-		assertTrue(true);
+		ArrayList<Object> vals = new ArrayList();
+		RefObj anObj = new RefObj(vals);
+		vals.add(anObj);
+		vals.add("Hello, world!");
+		vals.add(anObj);
+		
+		
+		Document tDoc = testSer.serialize(vals);
+		Element root = tDoc.getRootElement();
+		assertEquals(root.getContent().size(), 2);
+		
+		Element colEle = (Element)root.getContent(0);
+		assertEquals(colEle.getAttribute("class").getValue(), "java.util.ArrayList");
+		assertEquals(colEle.getAttribute("id").getValue(), Integer.toString(vals.hashCode()));
+
+		assertEquals(((Element)colEle.getContent(0)).getText(), Integer.toString(anObj.hashCode()));
+		assertEquals(((Element)colEle.getContent(1)).getText(), "Hello, world!");
+		assertEquals(((Element)colEle.getContent(2)).getText(), Integer.toString(anObj.hashCode()));
 	}
 	
 	
