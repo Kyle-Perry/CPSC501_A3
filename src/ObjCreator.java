@@ -51,7 +51,6 @@ public class ObjCreator {
 	}
 
 	private Object createSubObject() {
-		Object newObject = null;
 		int selection;
 		int targetObj;
 
@@ -63,37 +62,20 @@ public class ObjCreator {
 					"3) A new object containing a array of object references",
 					"4) A new object containing a collection of objects",
 			"5) A reference to a previously created object"}, 5);
-			switch(selection) {
-			case 0:
-				newObject = createPrimObj();
-				break;
-			case 1:
-				newObject = createRefObj();
-				break;
-			case 2:
-				newObject = createPrimArrObj();
-				break;
-			case 3:
-				newObject = createRefArrObj();
-				break;
-			case 4:
-				newObject = createCollectionObj();
-				break;
-			case 5:
+			if((selection < 5) ) {
+				return getNewObject(selection);
+			}
+			else if(selection == 5) {
 				printElements();
 				targetObj = getInt(0, createdObjs.size() - 1);
-				newObject = createdObjs.get(targetObj);
-
-				break;
-			default:
-				break;
+				return createdObjs.get(targetObj);
 			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 
-		return newObject;
+		return null;
 	}
 
 	private PrimObj createPrimObj() {
@@ -162,38 +144,18 @@ public class ObjCreator {
 						"4) A new object containing a collection of objects",
 						"5) A reference to a previously created object",
 				"6) Quit adding objects"}, 6);
-				switch(selection) {
-				case 0:
-					newObject = createPrimObj();
+				if((selection < 5) ) {
+					newObject = getNewObject(selection);
 					objects.add(newObject);
-					break;
-				case 1:
-					newObject = createRefObj();
-					objects.add(newObject);
-					break;
-				case 2:
-					newObject = createPrimArrObj();
-					objects.add(newObject);
-					break;
-				case 3:
-					newObject = createRefArrObj();
-					objects.add(newObject);
-					break;
-				case 4:
-					newObject = createCollectionObj();
-					objects.add(newObject);
-					break;
-				case 5:
+				}
+				else if(selection == 5) {
 					printElements();
 					targetObj = getInt(0, createdObjs.size() - 1);
 					newObject = createdObjs.get(targetObj);
 					objects.add(newObject);
-					break;
-				case 6: 
-					return cObj;
-				default:
-					break;
 				}
+				else if(selection == 6) 
+					return cObj;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -217,7 +179,7 @@ public class ObjCreator {
 				if(selection <= max && selection >= 0) {
 					System.out.println();
 					return selection;
-			}
+				}
 				throw new IndexOutOfBoundsException("Invalid choice, please select a choice between 0 and " + max);
 			}
 			catch(Exception e)
@@ -252,5 +214,23 @@ public class ObjCreator {
 		System.out.println("Previously created objects:");
 		for(Object o: createdObjs)
 			System.out.println(createdObjs.indexOf(o) + ") " + o);
+	}
+
+
+	private Object getNewObject(int selection) {
+		switch(selection) {
+		case 0:
+			return createPrimObj();
+		case 1:
+			return createRefObj();
+		case 2:
+			return createPrimArrObj();
+		case 3:
+			return createRefArrObj();
+		case 4:
+			return createCollectionObj();
+		default:
+			return null;
+		}
 	}
 }

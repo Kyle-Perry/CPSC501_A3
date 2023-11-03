@@ -9,7 +9,6 @@ import org.jdom2.output.XMLOutputter;
 
 public class Sender {
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Serializer ser = new Serializer();
 		ObjCreator creator = new ObjCreator();
 		Document aDoc;
@@ -62,14 +61,6 @@ public class Sender {
 		{
 			e.printStackTrace();
 		}
-		/*
-		head = deser.deserialize(aDoc);
-		
-		System.out.println("======================================================================");
-		
-		insp.inspect(head);
-
-		System.out.println("======================================================================");
-		*/
+	
 	}
 }
