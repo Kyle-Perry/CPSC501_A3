@@ -25,7 +25,7 @@ public class Inspector {
 
 		tabbing++;
 		Class<?> classObj = obj.getClass();
-		
+
 		System.out.println(addTabbing() + "Class: " + classObj + "\n");
 		System.out.println(addTabbing() + "Hashcode: " + obj.hashCode() + "\n");
 
@@ -33,10 +33,10 @@ public class Inspector {
 
 		if(classObj.isArray()) 
 			inspectArray(obj, classObj);
-		
+
 		else if(obj instanceof Collection) 
 			inspectCollection(obj);
-		
+
 		else 
 			inspectObject(obj, classObj);
 
@@ -48,7 +48,7 @@ public class Inspector {
 	private void inspectObject(Object obj, Class<?> classObj){
 		Field[] fields;
 		Object cur;
-		
+
 		while(classObj != null) {
 
 			if(classObj == String.class)
@@ -64,13 +64,16 @@ public class Inspector {
 					try {
 						f.setAccessible(true);
 						cur = f.get(obj);
-						System.out.println(addTabbing() + f.toString() + " = " + cur);						
 
 						if(!f.getType().isPrimitive() && !(f.getType() == java.lang.String.class) && cur != null) {
+							System.out.println(addTabbing() + f.toString() + " = " + cur.getClass()+"@"+cur.hashCode());						
 							beginSubInspection(cur);
-							
-
 						}
+						else
+							System.out.println(addTabbing() + f.toString() + " = " + cur);						
+
+
+
 					}
 					catch(Exception e) {
 						e.printStackTrace();
@@ -85,7 +88,7 @@ public class Inspector {
 				System.out.println("\n" + addTabbing() + "Superclass:");
 		}
 	}
-	
+
 	private void inspectArray(Object obj, Class<?> classObj) {
 		Object cur;
 		for(int i = 0; i < Array.getLength(obj); i++) {
@@ -99,7 +102,7 @@ public class Inspector {
 			}
 		}
 	}
-	
+
 	private void inspectCollection(Object obj){
 		int x = 0;
 
@@ -114,14 +117,14 @@ public class Inspector {
 
 		}
 	}
-	
+
 	private String addTabbing() {
 		String tabs= "";
 		for(int i = 0; i < tabbing; i++)
 			tabs += "\t";
 		return tabs;
 	}
-	
+
 	public void beginSubInspection(Object cur) {
 		System.out.println(addTabbing() + "Object reference found in field, inspecting...");
 		System.out.println(addTabbing() + "----------------------------------------------------------------------");
