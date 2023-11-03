@@ -13,7 +13,6 @@ public class ObjCreator {
 	}
 
 	public Object createObject() {
-		Object newObject = null;
 		int selection;
 
 		try {
@@ -23,31 +22,13 @@ public class ObjCreator {
 					"2) An object containing a array of primitives",
 					"3) An object containing a array of object references",
 			"4) An object containing a collection of objects"}, 4);
-			switch(selection) {
-			case 0:
-				newObject = createPrimObj();
-				break;
-			case 1:
-				newObject = createRefObj();
-				break;
-			case 2:
-				newObject = createPrimArrObj();
-				break;
-			case 3:
-				newObject = createRefArrObj();
-				break;
-			case 4:
-				newObject = createCollectionObj();
-				break;
-			default:
-				break;
-			}
+			return getNewObject(selection);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 
-		return newObject;
+		return null;
 	}
 
 	private Object createSubObject() {
