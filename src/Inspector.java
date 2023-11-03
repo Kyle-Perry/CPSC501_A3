@@ -25,8 +25,6 @@ public class Inspector {
 
 		tabbing++;
 		Class<?> classObj = obj.getClass();
-		Field[] fields;
-		Object cur;
 		
 		System.out.println(addTabbing() + "Class: " + classObj + "\n");
 		System.out.println(addTabbing() + "Hashcode: " + obj.hashCode() + "\n");
@@ -39,49 +37,55 @@ public class Inspector {
 		else if(obj instanceof Collection) 
 			inspectCollection(obj);
 		
-		else {
-			while(classObj != null) {
-
-				if(classObj == String.class)
-				{
-					System.out.println(addTabbing() + "String value = " + obj);
-				}
-				else {
-					fields = classObj.getDeclaredFields();
-					if(fields.length > 0)
-						System.out.println(addTabbing() + "Declared Fields:");
-
-					for(Field f: fields) {
-						try {
-							f.setAccessible(true);
-							cur = f.get(obj);
-							System.out.println(addTabbing() + f.toString() + " = " + cur);						
-
-							if(!f.getType().isPrimitive() && !(f.getType() == java.lang.String.class) && cur != null) {
-								beginSubInspection(cur);
-								
-
-							}
-						}
-						catch(Exception e) {
-							e.printStackTrace();
-						}
-
-					}
-
-				}
-
-				classObj = classObj.getSuperclass();
-				if(classObj != null)
-					System.out.println("\n" + addTabbing() + "Superclass:");
-			}
-		}
+		else 
+			inspectObject(obj, classObj);
 
 		tabbing--;
 		System.out.println(addTabbing() + "Inspection of " + obj.getClass()+"@"+obj.hashCode() + " complete.");
 
 	}
 
+	private void inspectObject(Object obj, Class<?> classObj){
+		Field[] fields;
+		Object cur;
+		
+		while(classObj != null) {
+
+			if(classObj == String.class)
+			{
+				System.out.println(addTabbing() + "String value = " + obj);
+			}
+			else {
+				fields = classObj.getDeclaredFields();
+				if(fields.length > 0)
+					System.out.println(addTabbing() + "Declared Fields:");
+
+				for(Field f: fields) {
+					try {
+						f.setAccessible(true);
+						cur = f.get(obj);
+						System.out.println(addTabbing() + f.toString() + " = " + cur);						
+
+						if(!f.getType().isPrimitive() && !(f.getType() == java.lang.String.class) && cur != null) {
+							beginSubInspection(cur);
+							
+
+						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+
+				}
+
+			}
+
+			classObj = classObj.getSuperclass();
+			if(classObj != null)
+				System.out.println("\n" + addTabbing() + "Superclass:");
+		}
+	}
+	
 	private void inspectArray(Object obj, Class<?> classObj) {
 		Object cur;
 		for(int i = 0; i < Array.getLength(obj); i++) {
