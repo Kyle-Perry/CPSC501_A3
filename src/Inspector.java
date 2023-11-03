@@ -33,23 +33,12 @@ public class Inspector {
 
 		addressesViewed.add(obj.hashCode());
 
-		if(classObj.isArray()) {
+		if(classObj.isArray()) 
 			inspectArray(obj, classObj);
-		}
-		if(obj instanceof Collection) {
-			int x = 0;
-
-			for(Object o: (Collection<Object>)obj) {
-				System.out.println(addTabbing() + "Element " + x + " of collection: " + o);
-
-				if(!o.getClass().isPrimitive() && !(o.getClass() == java.lang.String.class) && o != null) {
-					beginSubInspection(o);
-
-				}
-				x++;
-
-			}
-		}
+		
+		else if(obj instanceof Collection) 
+			inspectCollection(obj);
+		
 		else {
 			while(classObj != null) {
 
@@ -104,6 +93,21 @@ public class Inspector {
 				beginSubInspection(cur);
 
 			}
+		}
+	}
+	
+	private void inspectCollection(Object obj){
+		int x = 0;
+
+		for(Object o: (Collection<Object>)obj) {
+			System.out.println(addTabbing() + "Element " + x + " of collection: " + o);
+
+			if(!o.getClass().isPrimitive() && !(o.getClass() == java.lang.String.class) && o != null) {
+				beginSubInspection(o);
+
+			}
+			x++;
+
 		}
 	}
 	
