@@ -34,16 +34,7 @@ public class Inspector {
 		addressesViewed.add(obj.hashCode());
 
 		if(classObj.isArray()) {
-			for(int i = 0; i < Array.getLength(obj); i++) {
-				cur = Array.get(obj, i);
-				System.out.println(addTabbing() + "Element " + i + " of array: " + cur);
-
-
-				if(!classObj.getComponentType().isPrimitive() && !(cur instanceof String) && cur != null) {
-					beginSubInspection(cur);
-
-				}
-			}
+			inspectArray(obj, classObj);
 		}
 		if(obj instanceof Collection) {
 			int x = 0;
@@ -102,6 +93,20 @@ public class Inspector {
 
 	}
 
+	private void inspectArray(Object obj, Class<?> classObj) {
+		Object cur;
+		for(int i = 0; i < Array.getLength(obj); i++) {
+			cur = Array.get(obj, i);
+			System.out.println(addTabbing() + "Element " + i + " of array: " + cur);
+
+
+			if(!classObj.getComponentType().isPrimitive() && !(cur instanceof String) && cur != null) {
+				beginSubInspection(cur);
+
+			}
+		}
+	}
+	
 	private String addTabbing() {
 		String tabs= "";
 		for(int i = 0; i < tabbing; i++)
