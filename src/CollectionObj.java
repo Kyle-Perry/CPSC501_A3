@@ -14,7 +14,7 @@ public class CollectionObj {
 	}
 	
 	public String toString() {
-		return this.collection.toString();
+		return this.collection.getClass() + "@" +this.collection.hashCode();
 	}
 	
 }
