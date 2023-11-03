@@ -40,11 +40,8 @@ public class Inspector {
 
 
 				if(!classObj.getComponentType().isPrimitive() && !(cur instanceof String) && cur != null) {
-					System.out.println(addTabbing() + "Object reference found in field, inspecting...");
-					System.out.println(addTabbing() + "----------------------------------------------------------------------");
+					beginSubInspection(cur);
 
-					inspect(cur);
-					System.out.println(addTabbing() + "----------------------------------------------------------------------");
 				}
 			}
 		}
@@ -55,12 +52,8 @@ public class Inspector {
 				System.out.println(addTabbing() + "Element " + x + " of collection: " + o);
 
 				if(!o.getClass().isPrimitive() && !(o.getClass() == java.lang.String.class) && o != null) {
+					beginSubInspection(o);
 
-					System.out.println(addTabbing() + "Object reference found in field, inspecting...");
-					System.out.println(addTabbing() + "----------------------------------------------------------------------");
-
-					inspect(o);
-					System.out.println(addTabbing() + "----------------------------------------------------------------------");
 				}
 				x++;
 
@@ -85,12 +78,8 @@ public class Inspector {
 							System.out.println(addTabbing() + f.toString() + " = " + cur);						
 
 							if(!f.getType().isPrimitive() && !(f.getType() == java.lang.String.class) && cur != null) {
-
-								System.out.println(addTabbing() + "Object reference found in field, inspecting...");
-								System.out.println(addTabbing() + "----------------------------------------------------------------------");
-
-								inspect(cur);
-								System.out.println(addTabbing() + "----------------------------------------------------------------------");
+								beginSubInspection(cur);
+								
 
 							}
 						}
@@ -118,5 +107,13 @@ public class Inspector {
 		for(int i = 0; i < tabbing; i++)
 			tabs += "\t";
 		return tabs;
+	}
+	
+	public void beginSubInspection(Object cur) {
+		System.out.println(addTabbing() + "Object reference found in field, inspecting...");
+		System.out.println(addTabbing() + "----------------------------------------------------------------------");
+
+		inspect(cur);
+		System.out.println(addTabbing() + "----------------------------------------------------------------------");
 	}
 }

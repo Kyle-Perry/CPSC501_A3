@@ -10,7 +10,6 @@ import org.junit.Test;
 
 public class TestDeserializer {
 	private static Deserializer testDeser;
-	//private static Serializer testSer;
 	
 	@BeforeClass
 	public static void initializeTest() {
@@ -97,7 +96,6 @@ public class TestDeserializer {
 
 		testObj = testDeser.deserialize(tDoc);
 		
-		System.out.print(testObj);
 		assertEquals(((TestObj)testObj).val1, 100);
 		assertEquals(((TestObj)testObj).val2, Short.MAX_VALUE);
 		assertEquals(((TestObj)testObj).val3, Long.MAX_VALUE);
