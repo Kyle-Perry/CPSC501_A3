@@ -3,20 +3,19 @@ import java.util.Scanner;
 
 public class ObjCreator {
 	private ArrayList<Object> createdObjs;
-	private Scanner userIn;
 	private static final int MAX_ARRAY_LENGTH = 10;
+	private CreatorUI userInterface= new CreatorUI();
 
 	public ObjCreator() {
 		super();
 		createdObjs = new ArrayList<Object>();
-		userIn = new Scanner(System.in);
 	}
 
 	public Object createObject() {
 		int selection;
 
 		try {
-			selection = getMenuSelection(new String[] {"Please select an object to create:",
+			selection = userInterface.getMenuSelection(new String[] {"Please select an object to create:",
 					"0) An object containing primitive fields",
 					"1) An object containing an object reference",
 					"2) An object containing a array of primitives",
@@ -36,7 +35,7 @@ public class ObjCreator {
 		int targetObj;
 
 		try {
-			selection = getMenuSelection(new String[] {"What would you like to refer to in this field:",
+			selection = userInterface.getMenuSelection(new String[] {"What would you like to refer to in this field:",
 					"0) A new object containing primitive fields",
 					"1) A new object containing an object reference",
 					"2) A new object containing a array of primitives",
@@ -47,8 +46,8 @@ public class ObjCreator {
 				return getNewObject(selection);
 			}
 			else if(selection == 5) {
-				printElements();
-				targetObj = getInt(0, createdObjs.size() - 1);
+				userInterface.printElements(createdObjs);
+				targetObj = userInterface.getInt("Please enter an integer between " + 0 + " and " + (createdObjs.size() - 1) + ": ", 0, createdObjs.size() - 1);
 				return createdObjs.get(targetObj);
 			}
 		}
@@ -60,7 +59,8 @@ public class ObjCreator {
 	}
 
 	private PrimObj createPrimObj() {
-		PrimObj created = new PrimObj(getInt(Integer.MIN_VALUE, Integer.MAX_VALUE), getInt(Integer.MIN_VALUE, Integer.MAX_VALUE));
+		PrimObj created = new PrimObj(userInterface.getInt("Please enter an integer between " + Integer.MIN_VALUE + " and " + Integer.MAX_VALUE + ": ", Integer.MIN_VALUE, Integer.MAX_VALUE), 
+															userInterface.getInt("Please enter an integer between " + Integer.MIN_VALUE + " and " + Integer.MAX_VALUE + ": ", Integer.MIN_VALUE, Integer.MAX_VALUE));
 
 		createdObjs.add(created);
 		return created;
@@ -79,12 +79,11 @@ public class ObjCreator {
 		int[] myArr;
 		int len;
 
-		System.out.println("Please enter a length for the array from 1 to " + MAX_ARRAY_LENGTH);
-		len = getInt(0, MAX_ARRAY_LENGTH);
+		len = userInterface.getInt("Please enter a length for the array from 0 to " + MAX_ARRAY_LENGTH + ": ", 0, MAX_ARRAY_LENGTH);
 
 		myArr = new int[len];
 		for(int i = 0; i < myArr.length; i++)
-			myArr[i] = 	getInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+			myArr[i] = 	userInterface.getInt("Please enter an integer between " + Integer.MIN_VALUE + " and " + Integer.MAX_VALUE + ": ", Integer.MIN_VALUE, Integer.MAX_VALUE);
 		created =  new PrimArrObj(myArr);
 		createdObjs.add(created);
 
@@ -98,8 +97,7 @@ public class ObjCreator {
 		createdObjs.add(created);
 		int len;
 
-		System.out.println("Please enter a length for the array from 1 to " + MAX_ARRAY_LENGTH);
-		len = getInt(0, MAX_ARRAY_LENGTH);
+		len = userInterface.getInt("Please enter a length for the array from 0 to " + MAX_ARRAY_LENGTH + ": ", 0, MAX_ARRAY_LENGTH);
 
 		created.arrObjects = new Object[len];
 		for(int i = 0; i < created.arrObjects.length; i++)
@@ -117,7 +115,7 @@ public class ObjCreator {
 		int targetObj;
 		while(true) {
 			try {
-				selection = getMenuSelection(new String[] {"What object would you like to add to this collection:",
+				selection = userInterface.getMenuSelection(new String[] {"What object would you like to add to this collection:",
 						"0) A new object containing primitive fields",
 						"1) A new object containing an object reference",
 						"2) A new object containing a array of primitives",
@@ -130,8 +128,8 @@ public class ObjCreator {
 					objects.add(newObject);
 				}
 				else if(selection == 5) {
-					printElements();
-					targetObj = getInt(0, createdObjs.size() - 1);
+					userInterface.printElements(createdObjs);
+					targetObj = userInterface.getInt("Please enter an integer between " + 0 + " and " + (createdObjs.size() - 1) + ": ", 0, createdObjs.size() - 1);
 					newObject = createdObjs.get(targetObj);
 					objects.add(newObject);
 				}
@@ -142,59 +140,6 @@ public class ObjCreator {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private int getMenuSelection(String[] menu, int max) {
-		int selection = -1;
-
-		for(String line: menu) {
-			System.out.println(line);
-		}
-
-
-		while(true) {
-			try {
-				System.out.print("Please make a selection: ");
-
-				selection = userIn.nextInt();
-				if(selection <= max && selection >= 0) {
-					System.out.println();
-					return selection;
-				}
-				throw new IndexOutOfBoundsException("Invalid choice, please select a choice between 0 and " + max);
-			}
-			catch(Exception e)
-			{
-				e.getMessage();
-			}
-		}
-	}
-
-	private int getInt(int min, int max) {
-		int val = 0;
-
-		while(true) {
-			try {
-				System.out.print("Please enter an integer between " + min + " and " + max + ": ");
-
-				val = userIn.nextInt();
-				if(val <= max && val >= min) {
-					System.out.println();
-					return val;
-				}
-				throw new IndexOutOfBoundsException("Integer out of range");
-			}
-			catch(Exception e)
-			{
-				e.getMessage();
-			}
-		}
-	}
-
-	private void printElements() {
-		System.out.println("Previously created objects:");
-		for(Object o: createdObjs)
-			System.out.println(createdObjs.indexOf(o) + ") " + o);
 	}
 
 
