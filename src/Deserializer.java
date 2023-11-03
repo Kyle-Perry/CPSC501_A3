@@ -75,9 +75,6 @@ public class Deserializer {
 						dummyCons = classObj.getDeclaredConstructor(null);
 						dummyCons.setAccessible(true);
 						dummy = dummyCons.newInstance(null);
-						
-						//dummy = classObj.newInstance();
-
 					}
 					deserialized.put(attributes.get(1).getIntValue(), dummy);
 				}
